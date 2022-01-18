@@ -1,5 +1,5 @@
 import { SignUpController } from './signup'
-import { HttpRequest } from '../protocol/http'
+import { HttpRequest } from '../protocols/http'
 import { MissingParamError } from '../../errors/missing-param-error'
 
 describe('SignUp Controller', () => {

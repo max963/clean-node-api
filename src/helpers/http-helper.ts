@@ -1,4 +1,4 @@
-import { HttpResponse } from '../presentation/protocol/http'
+import { HttpResponse } from '../presentation/protocols/http'
 
 export const badRequest = (error: Error): HttpResponse => {
   return {
