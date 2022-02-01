@@ -16,9 +16,10 @@ const makeAddAccount = (): AddAccount => {
     add (account: AddAccountModel): AccountModel {
       const fakeAccountModel = {
         id: 'valid_id',
-        name: 'any_name',
-        email: 'any_email',
-        password: 'any_password'
+        name: 'valid_email',
+        email: 'valid_email',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
       }
 
       return fakeAccountModel
@@ -181,6 +182,45 @@ describe('SignUp Controller', () => {
       name: 'any_email',
       email: 'any_email@mail.com',
       password: 'any_password'
+    })
+  })
+
+  test('Should return 500 if AddAccount throws', () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  test('Should return 200 if a nvalid data is provided', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        name: 'valid_email',
+        email: 'valid_email',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
+      }
+    }
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'valid_id',
+      name: 'valid_email',
+      email: 'valid_email',
+      password: 'valid_password',
+      passwordConfirmation: 'valid_password'
     })
   })
 })
