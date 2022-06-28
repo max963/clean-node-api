@@ -10,7 +10,15 @@ export class DbAddAccount implements AddAccount {
   }
 
   async add (account: AddAccountModel): Promise<AccountModel> {
+    const accountModel = new Account()
     await this.encrypter.encrypt(account.password)
-    throw new Error('Method not implemented.')
+    return new Promise(resolve => resolve(accountModel))
   }
+}
+
+class Account implements AccountModel {
+  id: string
+  name: string
+  email: string
+  password: string
 }
